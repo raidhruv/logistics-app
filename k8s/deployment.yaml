@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logistics-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: logistics-app
+  template:
+    metadata:
+      labels:
+        app: logistics-app
+    spec:
+      containers:
+      - name: logistics-app
+        image: dhruvrai25/logistics-app:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080

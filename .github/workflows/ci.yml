@@ -6,7 +6,7 @@ on:
 
 jobs:
   build-test-push:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
     - name: Checkout code
@@ -38,3 +38,8 @@ jobs:
 
     - name: Push Docker Image
       run: docker push ${{ secrets.DOCKER_USERNAME }}/logistics-app:latest
+
+    - name: Deploy to Kubernetes
+      run: |
+        kubectl set image deployment/logistics-app logistics-app=${{ secrets.DOCKER_USERNAME }}/logistics-app:latest
+        kubectl rollout status deployment/logistics-app

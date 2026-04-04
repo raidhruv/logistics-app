@@ -40,4 +40,5 @@ jobs:
       - name: Deploy to Kubernetes
         run: |
           kubectl set image deployment/logistics-app logistics-app=${{ secrets.DOCKER_USERNAME }}/logistics-app:${{ env.SHA }}
+          kubectl annotate deployment logistics-app kubernetes.io/change-cause="commit ${{ env.SHA }}"
           kubectl rollout status deployment/logistics-app

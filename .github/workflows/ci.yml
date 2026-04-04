@@ -1,5 +1,5 @@
 name: CI-CD Pipeline
-
+# This workflow builds a Docker image for the logistics application, pushes it to Docker Hub, and deploys it to a Kubernetes cluster whenever changes are pushed to the main branch.
 on:
   push:
     branches: ["main"]

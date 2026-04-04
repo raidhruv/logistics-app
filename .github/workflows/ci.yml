@@ -8,6 +8,9 @@ jobs:
   build-test-push:
     runs-on: self-hosted
 
+    env:
+      VERSION: v1.0.${{ github.run_number }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -26,13 +29,15 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t "${{ secrets.DOCKER_USERNAME }}/logistics-app:${{ env.SHA }}" .
-          docker tag "${{ secrets.DOCKER_USERNAME }}/logistics-app:${{ env.SHA }}" "${{ secrets.DOCKER_USERNAME }}/logistics-app:latest"
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/logistics-app:${{ env.SHA }} .
+          docker tag ${{ secrets.DOCKER_USERNAME }}/logistics-app:${{ env.SHA }} ${{ secrets.DOCKER_USERNAME }}/logistics-app:latest
+          docker tag ${{ secrets.DOCKER_USERNAME }}/logistics-app:${{ env.SHA }} ${{ secrets.DOCKER_USERNAME }}/logistics-app:${{ env.VERSION }}
 
       - name: Push Docker Images
         run: |
           docker push "${{ secrets.DOCKER_USERNAME }}/logistics-app:${{ env.SHA }}"
           docker push "${{ secrets.DOCKER_USERNAME }}/logistics-app:latest"
+          docker push ${{ secrets.DOCKER_USERNAME }}/logistics-app:${{ env.VERSION }}
 
       - name: Debug image
         run: echo "${{ secrets.DOCKER_USERNAME }}/logistics-app:${{ env.SHA }}"

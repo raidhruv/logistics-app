@@ -34,6 +34,9 @@ jobs:
           docker push "${{ secrets.DOCKER_USERNAME }}/logistics-app:${{ env.SHA }}"
           docker push "${{ secrets.DOCKER_USERNAME }}/logistics-app:latest"
 
+      - name: Debug image
+        run: echo "${{ secrets.DOCKER_USERNAME }}/logistics-app:${{ env.SHA }}"
+      
       - name: Deploy to Kubernetes
         run: |
           kubectl set image deployment/logistics-app logistics-app=${{ secrets.DOCKER_USERNAME }}/logistics-app:${{ env.SHA }}

@@ -47,16 +47,4 @@ jobs:
           kubectl set image deployment/logistics-app logistics-app=${{ secrets.DOCKER_USERNAME }}/logistics-app:${{ env.SHA }}
           kubectl annotate deployment logistics-app kubernetes.io/change-cause="commit ${{ env.SHA }}"
           kubectl rollout status deployment/logistics-app
-
-      - name: Cleanup Docker images
-        shell: powershell
-        run: |
-          docker image prune -f
-
-          $images = docker images "${{ secrets.DOCKER_USERNAME }}/logistics-app" --format "{{.Tag}}"
-
-          foreach ($tag in $images) {
-            if ($tag -ne "${{ env.SHA }}" -and $tag -ne "latest") {
-              docker rmi "${{ secrets.DOCKER_USERNAME }}/logistics-app:$tag"
-            }
-          }
+          

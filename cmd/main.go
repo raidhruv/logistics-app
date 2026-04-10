@@ -1,6 +1,8 @@
 package main
 
 import (
+	
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"logistics-app/internal/handler"
 	"logistics-app/internal/repository"
@@ -9,6 +11,13 @@ import (
 
 func main() {
 	r := gin.Default()
+	// CORS middleware
+	r.Use(cors.New(cors.Config{
+    	AllowOrigins:     []string{"http://localhost:5500"},
+    	AllowMethods:     []string{"GET", "POST", "PUT", "OPTIONS"},
+    	AllowHeaders:     []string{"Origin", "Content-Type"},
+    	AllowCredentials: true,
+	}))
 
 	repo := repository.NewShipmentRepository()
 	service := service.NewShipmentService(repo)

@@ -1,12 +1,12 @@
 package service
-const DefaultLocation = "Warehouse"
+
 import (
 	"logistics-app/internal/model"
 	"logistics-app/internal/repository"
 
 	"github.com/google/uuid"
 )
-
+const DefaultLocation = "Warehouse"
 type ShipmentService struct {
 	repo *repository.ShipmentRepository
 }

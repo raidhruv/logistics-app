@@ -12,11 +12,11 @@ func NewShipmentRepository() *ShipmentRepository {
 	}
 }
 
-func (r *ShipmentRepository) Create(s model.Shipment) {
+func (r *ShipmentRepository) Save(s model.Shipment) {
 	r.data[s.ID] = s
 }
 
-func (r *ShipmentRepository) Get(id string) (model.Shipment, bool) {
+func (r *ShipmentRepository) GetByID(id string) (model.Shipment, bool) {
 	s, ok := r.data[id]
 	return s, ok
 }

@@ -1,10 +1,7 @@
 package handler
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
-	"logistics-app/internal/model"
 	"logistics-app/internal/service"
 )
 
@@ -17,35 +14,50 @@ func NewShipmentHandler(s *service.ShipmentService) *ShipmentHandler {
 }
 
 func (h *ShipmentHandler) CreateShipment(c *gin.Context) {
-	var shipment model.Shipment
-	if err := c.ShouldBindJSON(&shipment); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	var input struct {
+		Name string `json:"name"`
+	}
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(400, gin.H{"error": "invalid input"})
 		return
 	}
 
-	h.service.CreateShipment(shipment)
-	c.JSON(http.StatusOK, shipment)
+	shipment := h.service.CreateShipment(input.Name)
+
+	c.JSON(200, shipment)
 }
 
 func (h *ShipmentHandler) GetShipment(c *gin.Context) {
 	id := c.Param("id")
+
 	shipment, ok := h.service.GetShipment(id)
 	if !ok {
-		c.JSON(http.StatusNotFound, gin.H{"error": "not found"})
+		c.JSON(404, gin.H{"error": "not found"})
 		return
 	}
-	c.JSON(http.StatusOK, shipment)
+
+	c.JSON(200, shipment)
 }
 
 func (h *ShipmentHandler) UpdateShipment(c *gin.Context) {
 	id := c.Param("id")
-	var shipment model.Shipment
 
-	if err := c.ShouldBindJSON(&shipment); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	var input struct {
+		Status   string `json:"status"`
+		Location string `json:"location"`
+	}
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(400, gin.H{"error": "invalid input"})
 		return
 	}
 
-	h.service.UpdateShipment(id, shipment)
-	c.JSON(http.StatusOK, shipment)
+	shipment, ok := h.service.UpdateShipment(id, input.Status, input.Location)
+	if !ok {
+		c.JSON(404, gin.H{"error": "not found"})
+		return
+	}
+
+	c.JSON(200, shipment)
 }

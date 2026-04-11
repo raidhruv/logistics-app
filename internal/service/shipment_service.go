@@ -1,5 +1,5 @@
 package service
-
+const DefaultLocation = "Warehouse"
 import (
 	"logistics-app/internal/model"
 	"logistics-app/internal/repository"
@@ -14,14 +14,18 @@ type ShipmentService struct {
 func NewShipmentService(r *repository.ShipmentRepository) *ShipmentService {
 	return &ShipmentService{repo: r}
 }
-
+// ShipmentService provides business logic for managing shipments. 
+// It interacts with the ShipmentRepository to perform CRUD operations on shipments.
+// its main responsibilities include creating new shipments, retrieving existing shipments by ID,
+// and updating shipment details such as status and location. 
+// The service ensures that the business rules are applied correctly when manipulating shipment data.
 func (s *ShipmentService) CreateShipment(name string) model.Shipment {
 	shipment := model.Shipment{
 		ID:       uuid.New().String(),
 		Status:   "created",
-		Location: name,
+		Location: DefaultLocation,
 	}
-
+// its also the place where i kept the default location for the shipment, which is "Warehouse".
 	s.repo.Save(shipment)
 
 	return shipment

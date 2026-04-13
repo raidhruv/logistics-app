@@ -48,3 +48,6 @@ func (s *ShipmentService) UpdateShipment(id string, status string, location stri
 
 	return shipment, true
 }
+func (s *ShipmentService) DeleteShipment(id string) error {
+    return s.repo.Delete(id)
+}

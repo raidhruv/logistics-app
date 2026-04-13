@@ -12,7 +12,7 @@ type ShipmentHandler struct {
 func NewShipmentHandler(s *service.ShipmentService) *ShipmentHandler {
 	return &ShipmentHandler{service: s}
 }
-
+//create shipment
 func (h *ShipmentHandler) CreateShipment(c *gin.Context) {
 	var input struct {
 		Name string `json:"name"`
@@ -27,7 +27,7 @@ func (h *ShipmentHandler) CreateShipment(c *gin.Context) {
 
 	c.JSON(200, shipment)
 }
-
+//get shipment by id
 func (h *ShipmentHandler) GetShipment(c *gin.Context) {
 	id := c.Param("id")
 
@@ -39,7 +39,7 @@ func (h *ShipmentHandler) GetShipment(c *gin.Context) {
 
 	c.JSON(200, shipment)
 }
-
+//update shipment
 func (h *ShipmentHandler) UpdateShipment(c *gin.Context) {
 	id := c.Param("id")
 
@@ -60,4 +60,16 @@ func (h *ShipmentHandler) UpdateShipment(c *gin.Context) {
 	}
 
 	c.JSON(200, shipment)
+}
+//delete shipment
+func (h *ShipmentHandler) DeleteShipment(c *gin.Context) {
+	id := c.Param("id")
+
+	err := h.service.DeleteShipment(id)
+	if err != nil {
+		c.JSON(404, gin.H{"error": "Shipment not found"})
+		return
+	}
+
+	c.JSON(200, gin.H{"message": "Shipment deleted"})
 }

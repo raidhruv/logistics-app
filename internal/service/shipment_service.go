@@ -5,6 +5,7 @@ import (
 	"logistics-app/internal/repository"
 
 	"github.com/google/uuid"
+	"time"
 )
 const DefaultLocation = "Warehouse"
 type ShipmentService struct {
@@ -24,6 +25,12 @@ func (s *ShipmentService) CreateShipment(name string) model.Shipment {
 		ID:       uuid.New().String(),
 		Status:   "created",
 		Location: DefaultLocation,
+		TransitPoints: []model.TransitPoint{
+			{
+				Location: DefaultLocation,
+				Time:     time.Now().Format(time.RFC3339),
+			},
+		},
 	}
 // its also the place where i kept the default location for the shipment, which is "Warehouse".
 	s.repo.Save(shipment)
@@ -35,14 +42,28 @@ func (s *ShipmentService) GetShipment(id string) (model.Shipment, bool) {
 	return s.repo.GetByID(id)
 }
 
+import "time"
+
 func (s *ShipmentService) UpdateShipment(id string, status string, location string) (model.Shipment, bool) {
 	shipment, ok := s.repo.GetByID(id)
 	if !ok {
 		return model.Shipment{}, false
 	}
 
-	shipment.Status = status
-	shipment.Location = location
+	// update status safely
+	if status != "" {
+		shipment.Status = status
+	}
+
+	// update location + append transit history
+	if location != "" && location != shipment.Location {
+		shipment.Location = location
+
+		shipment.TransitPoints = append(shipment.TransitPoints, model.TransitPoint{
+			Location: location,
+			Time:     time.Now().Format(time.RFC3339),
+		})
+	}
 
 	s.repo.Update(id, shipment)
 

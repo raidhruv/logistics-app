@@ -42,8 +42,6 @@ func (s *ShipmentService) GetShipment(id string) (model.Shipment, bool) {
 	return s.repo.GetByID(id)
 }
 
-import "time"
-
 func (s *ShipmentService) UpdateShipment(id string, status string, location string) (model.Shipment, bool) {
 	shipment, ok := s.repo.GetByID(id)
 	if !ok {

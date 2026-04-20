@@ -15,7 +15,7 @@ func NewShipmentHandler(s *service.ShipmentService) *ShipmentHandler {
 //create shipment
 func (h *ShipmentHandler) CreateShipment(c *gin.Context) {
 	var input struct {
-		Name string `json:"name"`
+		Details string `json:"details"`
 	}
 
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -23,7 +23,7 @@ func (h *ShipmentHandler) CreateShipment(c *gin.Context) {
 		return
 	}
 
-	shipment := h.service.CreateShipment(input.Name)
+	shipment := h.service.CreateShipment(input.Details)
 
 	c.JSON(200, shipment)
 }
